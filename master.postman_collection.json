@@ -1,0 +1,382 @@
+{
+	"info": {
+		"_postman_id": "eac99a9c-6f24-4ff5-920f-fa5c96e98168",
+		"name": "master",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7551369"
+	},
+	"item": [
+		{
+			"name": "setting",
+			"item": [
+				{
+					"name": "superadmin",
+					"item": [
+						{
+							"name": "store",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"firstName\": \"user2\",\r\n \"lastName\": \"user2\",\r\n \"email\": \"user2@gmail.com\",\r\n \"password\": \"123\",\r\n \"type\": \"user\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/setting/superAdmin/register",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"setting",
+										"superAdmin",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"user2@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/user/auth/gmailLogin",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"auth",
+										"gmailLogin"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "favourite",
+							"item": [
+								{
+									"name": "store",
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "37beef3413d676f0fe2350427b7af7aff9ccb5238357f45ce342b6eb3a290197f7b9d310",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "x-access-token",
+													"type": "string"
+												},
+												{
+													"key": "in",
+													"value": "header",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n     \"productId\": \"6316f595c348d80264d35ba8\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/api/v1/user/product/favourite/store",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"product",
+												"favourite",
+												"store"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "single",
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "37beef3413d676f0fe2350427b7af7aff9ccb5238357f45ce342b6eb3a290197f7b9d310",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "x-access-token",
+													"type": "string"
+												},
+												{
+													"key": "in",
+													"value": "header",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/api/v1/user/product/favourite/single/6316f595c348d80264d35ba8",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"product",
+												"favourite",
+												"single",
+												"6316f595c348d80264d35ba8"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "index",
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "37beef3413d676f0fe2350427b7af7aff9ccb5238357f45ce342b6eb3a290197f7b9d310",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "x-access-token",
+													"type": "string"
+												},
+												{
+													"key": "in",
+													"value": "header",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base_url}}/api/v1/user/product/favourite/index",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"user",
+												"product",
+												"favourite",
+												"index"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "webhook",
+			"item": [
+				{
+					"name": "store",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "AN7VtJkGKUekgIFBrk5TYGHUJLAS87uma^A&STBDAS*&^DJsGASD$^^GASbjdlXrjLri1kD",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "x-access-token",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productName\":\"productName5\",\r\n    \"productImage\":\"https://png.pngtree.com/png-clipart/20200701/original/pngtree-a-bunch-of-red-roses-png-image_5427860.jpg\" ,\r\n    \"productDescription\":\"productDescription5\",\r\n    \"productLink\":\"productLink5\",\r\n    \"productIsStock\":\"false\",\r\n    \"vendorName\":\"vendorName2\",\r\n    \"vendorImage\":\"https://png.pngtree.com/png-clipart/20200701/original/pngtree-a-bunch-of-red-roses-png-image_5427860.jpg\",\r\n    \"vendorLink\":\"vendorLink2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/webHook/product/store",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webHook",
+								"product",
+								"store"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "single",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "64b2e53047d522f9fe7501152a7af7fda4ccb57b8701f35cb415e0bc6f795396a0b9df43",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "x-access-token",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/product/single/6316f573c348d80264d35b94",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"single",
+										"6316f573c348d80264d35b94"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "index",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "64b2e53047d522f9fe7501152a7af7fda4ccb57b8701f35cb415e0bc6f795396a0b9df43",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "x-access-token",
+											"type": "string"
+										},
+										{
+											"key": "in",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/product/index",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"index"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
