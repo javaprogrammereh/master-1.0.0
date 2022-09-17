@@ -34,38 +34,7 @@ module.exports = new (class singleController extends InitializeController {
               $cond : [{$eq : ["$favouriteproduct._id" , []]},false, true]
               // $cond : [{$eq : ["$favouriteproduct" , []]},false, true]
               //*
-            }
-              
-              // $cond : [{$eq : [{ $ifNull: ["$favouriteproduct", null]} , null]}, 0, 1]
-              // $ifNull: [ "$favouriteproduct", null ] },
-              // $cond: {
-                // if: {  $eq:[{ $ifNull: [ "$favouriteproduct._id", null ] },null] } ,
-                //  if: { $eq: ["$favouriteproduct",null]}, 
-                // if: { 
-                  // $ifNull: ["$favouriteproduct._id", false || true]
-                  // $ifNull: [ "$favouriteproduct._id", false]
-                // },
-                // then: false, 
-                // else: true            
-            // },
-          
-            // itsfavorit: { 
-              // $eq: ["$favouriteproduct",null]}, 
-              // $cond: {
-                // if: {  $eq:[{ $ifNull: [ "$favouriteproduct._id", null ] },null] } ,
-                //  if: { $eq: ["$favouriteproduct",null]}, 
-                // if: { $ifNull: [ "$favouriteproduct._id", null]},
-                // then: false, 
-                // else: true               
-              // }
-          //  } 
-           
-            // itsfavorit: { $ifNull: [ "$favouriteproduct", false ] }
-            // itsfavorit:{ $arrayElemAt: ["$favouriteproduct", null] },
-            //
-            //return favouriteproduct array 
-            //if (favouriteproduct.i[0]) >> itsfavorit=true
-            //else >>  itsfavorit=false
+            }  
           },
       }];
     }else{
@@ -75,21 +44,45 @@ module.exports = new (class singleController extends InitializeController {
         { $match: query },
         ...queryfavourite,
         {
+          //*
           $lookup: {
             from: "uploads",
-            let: { file_id: "$image" },
+            let: { file_id: "$imageGallery" }, //*
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$_id", "$$file_id"] },
+                  $expr: {
+                    $in: ["$_id", "$$file_id"],
+                  },
                 },
               },
               { $replaceRoot: { newRoot: "$file" } },
             ],
-            as: "image",
+            as: "imageGallery",
           },
         },
-        { $unwind: "$image" },
+        // {
+        //   $addFields: {
+        //     imageGallery: { $arrayElemAt: ["$imageGallery", 0] },
+        //   },
+        // },
+        // {
+        //   $lookup: {
+        //     from: "uploads",
+        //     let: { file_id: "$imageGallery" },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: { $eq: ["$_id", "$$file_id"] },
+        //         },
+        //       },
+        //       { $replaceRoot: { newRoot: "$file" } },
+        //     ],
+        //     as: "imageGallery",
+        //   },
+        // },
+            //  { $unwind: "$imageGallery" },
+
         {
           $lookup: {
             from: "productitems",
@@ -195,13 +188,17 @@ module.exports = new (class singleController extends InitializeController {
           $project: {
             name: 1,
             description: 1,
-            image: 1,
+            file:1,
+            path:1,
+            bucketname:1,
+            // image:1,
+            imageGallery: 1,//*
             details: 1,
             isStock: 1,
             price: 1,
             likeCount: 1,
-            // favouriteproduct:{
-              itsfavorit: 1,
+            /// favouriteproduct:{
+            itsfavorit: 1,
           // }
             vendors: {
               vendor: {
@@ -223,8 +220,17 @@ module.exports = new (class singleController extends InitializeController {
       ];
       const product = (await this.model.Product.aggregate(aggregateData))[0];
       if (!product) return this.helper.response(res, 123);
-      product.image = await this.helper.getLinkPublic(product.image);
+
+      console.log("product.image befor: ",product.imageGallery);
+
+      product.imageGallery = await this.helper.getLinkPublic(product.imageGallery);
+
+      console.log("product.image after: ",product.imageGallery);
+
       product.vendors = await this.helper.imagesLink(product.vendors);
+
+      // console.log("product.vendors docs: ",product.vendors);
+
       const Transform = await this.helper.transform(product, this.helper.itemTransform);
       return this.helper.response(res, 100, null, Transform);
     } catch (err) {

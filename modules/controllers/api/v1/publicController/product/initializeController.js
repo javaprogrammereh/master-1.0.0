@@ -13,8 +13,9 @@ const itemTransform = [
   ".name",
   ".description",
   ".details",
-  ".image",
+  ".imageGallery",
   ".price",
+  ".image",
   ".isStock",
   ".lastVendor",
   ".likeCount",
@@ -25,8 +26,11 @@ const itemTransform = [
   ".maxPrice",
   ".favouriteproduct",
   ".itsfavorit",
+  ".file",
+  ".bucketname",
+  ".path"
 ];
-
+//
 module.exports = class initializeController extends controller {
   constructor() {
     super();

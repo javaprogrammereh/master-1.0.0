@@ -9,11 +9,11 @@ const minioSecretKey = process.env.MINIO_SECRETKEY;
 const bucketnameProduct = process.env.MINIO_BUCKETNAME_PRODUCT;
 const bucketnameVendor = process.env.MINIO_BUCKETNAME_VENDOR;
 const minioLink = process.env.MINIO_LINK;
-
+//
 const minioClient = new Minio.Client({
   endPoint: minioEndPoint,
   port: Number(minioPort),
-  useSSL:false,
+  useSSL: false,
   accessKey: minioAccessKey,
   secretKey: minioSecretKey,
 });
@@ -30,8 +30,14 @@ module.exports.saveFile = async (file, type, fileType = null) => {
     if (fileType == null) path = fileName;
     else path = `${fileName}.${fileType}`;
     let data = file;
-    if (type == "vendor" || type == "product") data = fs.readFileSync(file, { "Content-Type": `image/${fileType}` });
-    const result = await minioClient.putObject(bucketname, path, data, metaData);
+    if (type == "vendor" || type == "product")
+      data = fs.readFileSync(file, { "Content-Type": `image/${fileType}` });
+    const result = await minioClient.putObject(
+      bucketname,
+      path,
+      data,
+      metaData
+    );
     if (result.err) {
       console.log(err);
       return false;
@@ -46,7 +52,10 @@ module.exports.getFile = async (object) => {
   return new Promise(async (resolve, rejects) => {
     try {
       let chunks = [];
-      const objectStream = await minioClient.getObject(object.bucketname, object.path);
+      const objectStream = await minioClient.getObject(
+        object.bucketname,
+        object.path
+      );
       objectStream.on("data", function (chunk) {
         chunks.push(chunk);
       });
@@ -70,9 +79,20 @@ module.exports.removeFile = async (object) => {
 };
 module.exports.getLinkPublic = async (object) => {
   try {
-    return `${minioLink}/${object.bucketname}/${object.path}`;
+    let objectArray = [];
+    if(object.length > 0){
+      for (var i = 0; i < object.length; i++) {
+        objectArray.push(`${minioLink}/${object[i].bucketname}/${object[i].path}`);
+      }
+      if (objectArray.length === object.length) {
+        return objectArray;
+      }
+    }
+    else{
+      return `${minioLink}/${object.bucketname}/${object.path}`;
+    }
+   
   } catch (err) {
     return false;
   }
 };
-//

@@ -7,8 +7,8 @@ module.exports = new (class indexController extends InitializeController {
     try {
       let query = {};
       let sort = {};
-      let aggregateData=[];
-      let queryfavourite =[];
+      let aggregateData = [];
+      let queryfavourite = [];
       //sort
       if (req.query.sort && req.query.order) {
         req.checkQuery("order", 133).isIn(["ASC", "DESC"]);
@@ -21,9 +21,9 @@ module.exports = new (class indexController extends InitializeController {
       } else {
         sort = { ...sort, createdAt: -1 };
       }
-      if (req.user&&req.user.type === "user") {
+      if (req.user && req.user.type === "user") {
         queryfavourite = [
-          { 
+          {
             $lookup: {
               from: "favouriteproducts",
               let: { product_id: "$_id" },
@@ -40,15 +40,16 @@ module.exports = new (class indexController extends InitializeController {
           },
           {
             $addFields: {
-              itsfavorit: { 
+              itsfavorit: {
                 //*
-                $cond : [{$eq : ["$favouriteproduct._id" , []]},false, true]
+                $cond: [{ $eq: ["$favouriteproduct._id", []] }, false, true],
                 // $cond : [{$eq : ["$favouriteproduct" , []]},false, true]
                 //*
-              }
+              },
             },
-        }];
-      }else{
+          },
+        ];
+      } else {
         //else favouriteproduct= null
       }
       const queryData = [
@@ -109,7 +110,7 @@ module.exports = new (class indexController extends InitializeController {
               {
                 $lookup: {
                   from: "uploads",
-                  let: { file_id: "$image" },
+                  let: { file_id: "$image" },//*
                   pipeline: [
                     {
                       $match: {
@@ -128,13 +129,16 @@ module.exports = new (class indexController extends InitializeController {
         },
         { $unwind: "$lastVendor" },
         {
+          //*
           $lookup: {
             from: "uploads",
-            let: { file_id: "$image" },
+            let: { file_id: "$imageGallery" }, //*
             pipeline: [
               {
                 $match: {
-                  $expr: { $eq: ["$_id", "$$file_id"] },
+                  $expr: {
+                    $in: ["$_id", "$$file_id"],
+                  },
                 },
               },
               { $replaceRoot: { newRoot: "$file" } },
@@ -142,14 +146,38 @@ module.exports = new (class indexController extends InitializeController {
             as: "image",
           },
         },
-        { $unwind: "$image" },
+        {
+          $addFields: {
+            image: { $first: "$image" } ,
+          },
+        },
+        // {
+        //   $lookup: {
+        //     from: "uploads",
+        //     let: { file_id: "$image" },
+        //     pipeline: [
+        //       {
+        //         $match: {
+        //           $expr: { $eq: ["$_id", "$$file_id"] },
+        //         },
+        //       },
+        //       { $replaceRoot: { newRoot: "$file" } },
+        //     ],
+        //     as: "image",
+        //   },
+        // },
+        // { $unwind: "$image" },
         ...queryfavourite,
         {
           $project: {
             name: 1,
             description: 1,
             details: 1,
-            image: 1,
+            file:1,
+            path:1,
+            bucketname:1,
+            image:1,
+            // imageGallery: 1, //*
             price: 1,
             isStock: 1,
             likeCount: 1,
@@ -164,7 +192,9 @@ module.exports = new (class indexController extends InitializeController {
         },
       ];
       let result = await this.helper.index(req, "product", queryData, aggregateData, sort);
+      console.log("index result docs: ",result.docs);
       result.docs = await this.helper.imagesLink(result.docs);
+      console.log("index result after  imagesLink: ",result);
       const Transform = await this.helper.transform(result, this.helper.itemTransform, true);
       return this.helper.response(res, 100, null, Transform);
     } catch (err) {

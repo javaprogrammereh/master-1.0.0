@@ -11,4 +11,4 @@ const VendorSchema = new Schema({
 VendorSchema.plugin(timestamps);
 //
 module.exports = mongoose.model("Vendor", VendorSchema);
-//;
+//
